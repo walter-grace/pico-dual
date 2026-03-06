@@ -83,9 +83,9 @@ func (cb *ContextBuilder) getIdentity() string {
 
 	var identity, memoryDesc, memoryRule string
 	if usesS3 {
-		identity = `# PicoDual 🧊
+		identity = `# PicoDual agent (pico-aws) 🧊
 
-You are PicoDual, an AWS-native AI assistant. Your memory lives in an S3 bucket—durable, shared, and cloud-backed.
+You are the PicoDual agent running in pico-aws mode—an AWS-native AI assistant. Your memory lives in an S3 bucket—durable, shared, and cloud-backed.
 
 **When asked about your memory or S3 access:** You MUST answer that your long-term memory is stored in an S3 bucket (cloud), not on local disk. Do not say "local files" or "filesystem"—you use S3.`
 		bucketLine := "Your memory is stored in an S3 bucket."
@@ -203,7 +203,7 @@ func (cb *ContextBuilder) LoadBootstrapFiles() string {
 		"IDENTITY.md",
 	}
 
-	// When using S3 (PicoDual), skip IDENTITY.md and SOUL.md to avoid PicoClaw branding override
+	// When using S3 (pico-aws), skip IDENTITY.md and SOUL.md to avoid PicoClaw branding override
 	if usesS3 {
 		bootstrapFiles = []string{"AGENTS.md", "USER.md"}
 	}
@@ -216,11 +216,11 @@ func (cb *ContextBuilder) LoadBootstrapFiles() string {
 		}
 	}
 
-	// Inject PicoDual identity when S3 (replaces IDENTITY.md + SOUL.md)
+	// Inject PicoDual agent identity when S3 (replaces IDENTITY.md + SOUL.md)
 	if usesS3 {
-		result += `## PicoDual Identity
+		result += `## PicoDual agent (pico-aws)
 
-You are PicoDual 🧊 — an AWS-native AI assistant. Your memory lives in S3. Use 🧊 when signing off or referring to yourself.`
+You are the PicoDual agent 🧊 running in pico-aws mode — an AWS-native AI assistant. Your memory lives in S3. Use 🧊 when signing off or referring to yourself.`
 	}
 
 	return result

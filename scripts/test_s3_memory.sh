@@ -1,5 +1,5 @@
 #!/bin/bash
-# Test S3 memory connectivity for the PicoDual agent.
+# Test S3 memory connectivity for the pico-aws agent.
 # Run from pico-combined directory: ./scripts/test_s3_memory.sh
 
 set -e

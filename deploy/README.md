@@ -1,10 +1,10 @@
 # Deploy: Attach This Folder to a Launched Instance
 
-Use this when your app **launches an EC2 (or other) instance** and **attaches the PicoDual agent repo** to it. On the instance, run from the repo root to start the **PicoDual agent** (CLI). No web UI—minimal footprint; the PicoDual agent can self-build later (e.g. add a UI or API).
+Use this when your app **launches an EC2 (or other) instance** and **attaches the PicoDual repo** to it. On the instance, run from the repo root to start the **pico-aws agent** (CLI). No web UI—minimal footprint; the pico-aws agent can self-build later (e.g. add a UI or API).
 
 ## What to attach
 
-Attach the **whole PicoDual agent folder** (pico-combined) to the instance—e.g. copy the repo, or mount it, or unpack a tarball at a path like `/opt/pico-combined` or `$HOME/pico-combined`. The run script must be executed from the **repo root** (the directory that contains `cmd/`, `config/`, `deploy/`, `workspace/`).
+Attach the **whole PicoDual repo** (pico-combined) to the instance—e.g. copy the repo, or mount it, or unpack a tarball at a path like `/opt/pico-combined` or `$HOME/pico-combined`. The run script must be executed from the **repo root** (the directory that contains `cmd/`, `config/`, `deploy/`, `workspace/`).
 
 ## Prerequisites on the instance
 
@@ -39,19 +39,19 @@ From the **repo root** (e.g. after `cd /opt/pico-combined`):
 
 ```bash
 chmod +x deploy/run.sh
-./deploy/run.sh          # PicoDual agent only (default)
+./deploy/run.sh          # pico-aws agent only (default)
 # or
 ./deploy/run.sh gateway  # agent + HTTP API (for channels / future UI)
 ```
 
-- **PicoDual agent** (default): CLI-only. Interactive or `./picoclaw agent -m "Build yourself"`. Smallest footprint.
-- **gateway**: PicoDual agent plus HTTP API (health, /api/chat, etc.) for Telegram/Discord or a future UI you add when self-building.
+- **pico-aws agent** (default): CLI-only. Interactive or `./picoclaw agent -m "Build yourself"`. Smallest footprint.
+- **gateway**: pico-aws agent plus HTTP API (health, /api/chat, etc.) for Telegram/Discord or a future UI you add when self-building.
 
 ## Summary for your launcher app
 
-1. Attach this folder (PicoDual agent repo) to the launched instance at a known path.
+1. Attach this folder (PicoDual repo) to the launched instance at a known path.
 2. Ensure Go, AWS creds, uv, and LLM keys are available (env or config).
 3. Create `~/.picoclaw/config.json` from `config/config.example.json` and edit.
-4. From repo root: `./deploy/run.sh` (PicoDual agent only).
+4. From repo root: `./deploy/run.sh` (pico-aws agent only).
 
-After that, prompt the PicoDual agent via CLI (e.g. “build yourself”); it can extend the repo and add a UI or API later.
+After that, prompt the pico-aws agent via CLI (e.g. “build yourself”); it can extend the repo and add a UI or API later.

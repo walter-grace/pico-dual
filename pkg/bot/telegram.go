@@ -522,7 +522,7 @@ func (b *Bot) sendStatus(ctx context.Context, chatIDInt int64, chatID telego.Cha
 // handleCreateAgent handles /createagent [description]. Creates a new skill via the agent.
 func (b *Bot) handleCreateAgent(ctx context.Context, chatIDInt int64, chatID telego.ChatID, from *telego.User, desc string) {
 	if desc == "" {
-		b.sendFormattedReply(ctx, chatID, "🤖 <b>Create Agent</b>\n\nDescribe the agent you want. Example:\n<code>/createagent Next.js specialist for App Router and Server Components</code>\n\nThe PicoDual agent will create a skill you can use later.")
+		b.sendFormattedReply(ctx, chatID, "🤖 <b>Create Agent</b>\n\nDescribe the agent you want. Example:\n<code>/createagent Next.js specialist for App Router and Server Components</code>\n\nThe PicoDual agent (pico-flare) will create a skill you can use later.")
 		return
 	}
 	prompt := fmt.Sprintf("Create a new agent/skill for: %s\n\nUse the create_skill tool. Choose a kebab-case name (e.g. nextjs-specialist), write a clear description, and provide detailed instructions in the content so this agent type knows how to behave. Create it now.", desc)

@@ -1,6 +1,6 @@
 # Deploy PicoFlare with Cloudflare
 
-Run the PicoDual agent (Cloudflare entrypoint) entirely on Cloudflare infrastructure: MCP, R2, Vectorize, and the Telegram bot via webhook + Cloudflare Tunnel.
+Run the **pico-flare agent** (Cloudflare) entirely on Cloudflare infrastructure: MCP, R2, Vectorize, and the Telegram bot via webhook + Cloudflare Tunnel.
 
 ## Architecture
 
@@ -19,7 +19,7 @@ Telegram → Cloudflare edge (Tunnel) → Go app (webhook) → MCP / R2 / Vector
 
 ## 1. Build
 
-From the **PicoDual** (pico-combined) directory:
+From the repo root (PicoDual / pico-combined):
 
 ```bash
 go build -o picoflare ./cmd/picoflare

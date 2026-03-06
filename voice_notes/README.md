@@ -3,8 +3,8 @@
 ## Overview
 The PicoFlare Telegram bot supports voice notes. When you send a voice message:
 
-1. **With `OPENROUTER_API_KEY`** — The audio is transcribed via OpenRouter (Gemini 2.5 Flash) and the text is passed to the PicoDual agent. The PicoDual agent responds to what you said.
-2. **Without** — The voice is stored in R2 and the PicoDual agent is told you sent a voice note (transcription disabled).
+1. **With `OPENROUTER_API_KEY`** — The audio is transcribed via OpenRouter (Gemini 2.5 Flash) and the text is passed to the pico-flare agent. The pico-flare agent responds to what you said.
+2. **Without** — The voice is stored in R2 and the pico-flare agent is told you sent a voice note (transcription disabled).
 
 Voice transcription uses the same `OPENROUTER_API_KEY` as the LLM — no separate key needed.
 
@@ -16,7 +16,7 @@ Reply to a voice message with `/voicenote` to save it. The bot will:
 3. Store the transcript in R2 at `users/{id}/notes/voice_{timestamp}.txt`
 4. Reply with a confirmation and transcript preview
 
-Without `/voicenote`, voice messages are transcribed and sent to the PicoDual agent for a response. Use `/voicenote` when you want to save without a reply.
+Without `/voicenote`, voice messages are transcribed and sent to the pico-flare agent for a response. Use `/voicenote` when you want to save without a reply.
 
 ## How Telegram Voice Notes Work
 

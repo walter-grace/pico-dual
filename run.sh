@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run PicoDual agent with .env loaded
+# Run pico-aws agent with .env loaded
 cd "$(dirname "$0")"
 set -a
 source .env 2>/dev/null || true

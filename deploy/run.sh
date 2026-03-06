@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run PicoDual agent in production. Invoke from the repo root (parent of deploy/).
+# Run pico-aws agent in production. Invoke from the repo root (parent of deploy/).
 # Usage: ./deploy/run.sh [agent|gateway]
 #   agent   – CLI-only agent (default; minimal footprint)
 #   gateway – agent + HTTP API (for channels / future UI)

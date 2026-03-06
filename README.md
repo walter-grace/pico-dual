@@ -6,7 +6,7 @@
 
 | Command | Description |
 |--------|-------------|
-| **cmd/picoaws** | PicoDual agent (AWS): gateway, chat API, multi-channel (Telegram, Slack, Discord, etc.), S3 memory, AWS MCP. Run on EC2 or any server. |
+| **cmd/picoclaw** | PicoDual agent (AWS): gateway, chat API, multi-channel (Telegram, Slack, Discord, etc.), S3 memory, AWS MCP. Run on EC2 or any server. |
 | **cmd/picoflare** | PicoDual agent (Cloudflare): interactive agent or Telegram bot, R2 + Vectorize, Cloudflare MCP, `/createagent` and create_skill. |
 
 ## Quick start
@@ -42,11 +42,11 @@
 
 ## Docs
 
-- [ONE_PAGER.md](ONE_PAGER.md) – PicoDual (AWS) positioning
-- [SELF_BUILDER.md](SELF_BUILDER.md) – PicoDual self-building repo agent (EC2)
-- [deploy/README.md](deploy/README.md) – PicoDual production run (AWS)
-- [DEPLOY_CLOUDFLARE.md](DEPLOY_CLOUDFLARE.md) – PicoDual on Cloudflare Tunnel
-- [TEST_MEMORY.md](TEST_MEMORY.md) – PicoDual memory testing (S3)
+- [ONE_PAGER.md](ONE_PAGER.md) – picoclaw positioning
+- [SELF_BUILDER.md](SELF_BUILDER.md) – Self-building repo agent (EC2)
+- [deploy/README.md](deploy/README.md) – Production run (picoclaw)
+- [DEPLOY_CLOUDFLARE.md](DEPLOY_CLOUDFLARE.md) – picoflare on Cloudflare Tunnel
+- [TEST_MEMORY.md](TEST_MEMORY.md) – Memory testing (picoclaw S3)
 - [INTEGRATION.md](INTEGRATION.md) – create_skill and Cloudflare in the main PicoDual agent loop (planned)
 
 ## License

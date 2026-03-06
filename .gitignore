@@ -13,7 +13,6 @@ build/
 /picoclaw
 /picoflare
 cmd/picoclaw/workspace
-web/.next
 
 # PicoDual / PicoClaw
 .picoclaw/

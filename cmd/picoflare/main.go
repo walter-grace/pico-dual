@@ -90,17 +90,17 @@ func main() {
 }
 
 func printHelp() {
-	fmt.Print(`PicoDual agent (Cloudflare) — MCP + R2 + Vectorize
+	fmt.Print(`PicoDual agent (pico-flare) — MCP + R2 + Vectorize
 
 Usage:
-  picoflare              Run PicoDual agent interactively (default)
-  picoflare agent        Run PicoDual agent (interactive)
+  picoflare              Run PicoDual agent (pico-flare) interactively (default)
+  picoflare agent        Run PicoDual agent (pico-flare) (interactive)
   picoflare bot          Telegram bot (TELEGRAM_BOT_TOKEN required)
   picoflare mcp-test     Create R2 bucket + Vectorize index via MCP
   picoflare deploy-fib3d Deploy fib3d Worker
   picoflare help         Show this help
 
-When the MCP server is unavailable, the PicoDual agent falls back to the
+When the MCP server is unavailable, the PicoDual agent (pico-flare) falls back to the
 Cloudflare REST API so you still get Workers, R2, KV, D1, and Vectorize tools.
 
 Set CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_API_TOKEN, OPENROUTER_API_KEY in .env.
@@ -119,7 +119,7 @@ func runAgent(accountID, apiToken, r2AccessKey, r2SecretKey string) {
 			log.Printf("MCP unavailable (%v), using Cloudflare REST API for Cloudflare operations", err)
 			mcp = nil
 		} else {
-			log.Printf("PicoDual agent: MCP connected")
+			log.Printf("pico-flare agent: MCP connected")
 		}
 	}
 
@@ -129,7 +129,7 @@ func runAgent(accountID, apiToken, r2AccessKey, r2SecretKey string) {
 		if _, err := candidate.VerifyToken(ctx); err == nil {
 			cfClient = candidate
 			if mcp == nil {
-				log.Printf("PicoDual agent: using Cloudflare REST API")
+				log.Printf("pico-flare agent: using Cloudflare REST API")
 			}
 		} else if mcp == nil {
 			log.Printf("Cloudflare API token invalid; Cloudflare features limited. Set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN for full access.")
@@ -154,9 +154,9 @@ func runAgent(accountID, apiToken, r2AccessKey, r2SecretKey string) {
 	var llmClient *llm.Client
 	if llmAPIKey != "" {
 		llmClient = llm.NewClient(llmAPIKey, llmModel)
-		log.Printf("PicoDual agent: LLM %s", llmClient.Model)
+		log.Printf("pico-flare agent: LLM %s", llmClient.Model)
 	} else {
-		log.Fatal("OPENROUTER_API_KEY is required for the PicoDual agent. Set it in .env.")
+		log.Fatal("OPENROUTER_API_KEY is required for the PicoDual agent (pico-flare). Set it in .env.")
 	}
 
 	workspace, _ := os.Getwd()
@@ -171,7 +171,7 @@ func runAgent(accountID, apiToken, r2AccessKey, r2SecretKey string) {
 		OnSubagentComplete: nil,
 	})
 
-	fmt.Println("PicoDual agent (Cloudflare) — Interactive mode (Ctrl+C to exit)")
+	fmt.Println("PicoDual agent (pico-flare) — Interactive mode (Ctrl+C to exit)")
 	fmt.Println()
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -189,7 +189,7 @@ func runAgent(accountID, apiToken, r2AccessKey, r2SecretKey string) {
 		fmt.Println()
 	}
 	if err := scanner.Err(); err != nil {
-		log.Printf("PicoDual agent: read error: %v", err)
+		log.Printf("pico-flare agent: read error: %v", err)
 	}
 }
 

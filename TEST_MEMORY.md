@@ -1,8 +1,8 @@
-# PicoDual Agent Memory Test Guide
+# pico-aws agent memory test (S3)
 
 ## S3 Memory (Default)
 
-The PicoDual agent uses **S3 as the default memory backend**. No local `MEMORY.md` file—the bucket is the memory.
+The **pico-aws agent** uses **S3 as the default memory backend**. No local `MEMORY.md` file—the bucket is the memory.
 
 1. **Create an S3 bucket** (one-time):
    ```bash
@@ -25,7 +25,7 @@ The PicoDual agent uses **S3 as the default memory backend**. No local `MEMORY.m
    }
    ```
 
-3. **Run the PicoDual agent** – memory goes to S3:
+3. **Run the pico-aws agent** – memory goes to S3:
    ```bash
    ./run.sh agent -m "Remember this in S3: test fact 123"
    ```
@@ -38,11 +38,11 @@ The PicoDual agent uses **S3 as the default memory backend**. No local `MEMORY.m
 
 ## Fallback to Filesystem
 
-If S3 bucket is not set, the PicoDual agent falls back to local files (`~/.picoclaw/workspace/memory/MEMORY.md`).
+If S3 bucket is not set, the pico-aws agent falls back to local files (`~/.picoclaw/workspace/memory/MEMORY.md`).
 
 ## Test S3 Connectivity
 
-Run the test script to verify the PicoDual agent can reach S3:
+Run the test script to verify the pico-aws agent can reach S3:
 
 ```bash
 cd pico-combined && go run ./scripts/test_s3_memory.go

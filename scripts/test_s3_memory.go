@@ -1,11 +1,11 @@
 //go:build ignore
 // +build ignore
 
-// Test S3 memory connectivity for the PicoDual agent.
+// Test S3 memory connectivity for the pico-aws agent.
 // Run: go run scripts/test_s3_memory.go
 // Or: cd pico-combined && go run ./scripts/test_s3_memory.go
 //
-// Requires the gateway to be running for the PicoDual agent memory check.
+// Requires the gateway to be running for the pico-aws agent memory check.
 // Start with: ./clawcubed gateway
 
 package main
@@ -42,7 +42,7 @@ func main() {
 	memCfg := &cfg.Memory
 	workspace := cfg.WorkspacePath()
 
-	fmt.Println("🧊 PicoDual agent S3 Memory Test")
+	fmt.Println("🧊 pico-aws agent S3 Memory Test")
 	fmt.Println("============================")
 	fmt.Printf("Config: %s\n", configPath)
 	fmt.Printf("Workspace: %s\n", workspace)
@@ -135,7 +135,7 @@ func main() {
 	}
 	resp.Body.Close()
 
-	// Ask the PicoDual agent about its memory
+	// Ask the pico-aws agent about its memory
 	chatBody := map[string]interface{}{
 		"messages": []map[string]string{
 			{"role": "user", "content": "What is your memory? Do you have access to your S3 memory? Answer briefly."},
