@@ -6,7 +6,7 @@
 
 | Command | Description |
 |--------|-------------|
-| **cmd/picoclaw** | PicoDual agent (AWS): gateway, chat API, multi-channel (Telegram, Slack, Discord, etc.), S3 memory, AWS MCP. Run on EC2 or any server. |
+| **cmd/picoaws** | PicoDual agent (AWS): gateway, chat API, multi-channel (Telegram, Slack, Discord, etc.), S3 memory, AWS MCP. Run on EC2 or any server. |
 | **cmd/picoflare** | PicoDual agent (Cloudflare): interactive agent or Telegram bot, R2 + Vectorize, Cloudflare MCP, `/createagent` and create_skill. |
 
 ## Quick start
