@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PICO DUAL — Two Agents. One Binary. Zero Excuses.</title>
+<meta name="description" content="PicoAws + PicoFlare = Pico Dual. The dual-cloud AI agent with memory that never dies.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0a'/%3E%3Crect x='2' y='2' width='60' height='60' rx='10' fill='none' stroke='%23ff00ff' stroke-width='2' opacity='0.6'/%3E%3Ctext x='32' y='28' text-anchor='middle' font-family='Impact,sans-serif' font-size='22' font-weight='bold' fill='%23ff00ff'%3EPD%3C/text%3E%3Cline x1='12' y1='34' x2='52' y2='34' stroke='%2300ffcc' stroke-width='2'/%3E%3Ctext x='14' y='48' font-family='monospace' font-size='9' fill='%23ff6600'%3EAWS%3C/text%3E%3Ctext x='37' y='48' font-family='monospace' font-size='9' fill='%23f6a821'%3ECF%3C/text%3E%3Ccircle cx='32' cy='46' r='2' fill='%2300ffcc'%3E%3Canimate attributeName='opacity' values='1;0.3;1' dur='2s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/svg%3E">
+<style>
+/* ============================================
+   PICO DUAL — Late-Night Infomercial Landing
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap');
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #0a0a0a;
+  --aws-orange: #ff6600;
+  --cf-amber: #f6a821;
+  --magenta: #ff00ff;
+  --cyan: #00ffcc;
+  --glow-cyan: 0 0 10px #00ffcc, 0 0 40px #00ffcc44;
+  --glow-magenta: 0 0 10px #ff00ff, 0 0 40px #ff00ff44;
+  --glow-orange: 0 0 10px #ff6600, 0 0 40px #ff660044;
+  --glow-amber: 0 0 10px #f6a821, 0 0 40px #f6a82144;
+  --scan-line: rgba(255,255,255,0.03);
+  --font-mono: 'Space Mono', 'Courier New', monospace;
+  --font-display: 'Bebas Neue', Impact, sans-serif;
+  --font-vt: 'VT323', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--black);
+  color: #e0e0e0;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* CRT SCAN LINES */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--scan-line) 2px,
+    var(--scan-line) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* CRT vignette */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ==================
+   VHS TRACKING BAR
+   ================== */
+.vhs-tracking {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, var(--cyan), var(--magenta), transparent);
+  z-index: 10000;
+  animation: vhs-slide 3s ease-in-out infinite;
+}
+
+@keyframes vhs-slide {
+  0%, 100% { transform: translateX(-30%); opacity: 0.7; }
+  50% { transform: translateX(30%); opacity: 1; }
+}
+
+.vhs-glitch {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9997;
+}
+
+.vhs-glitch::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  animation: vhs-glitch-bar 8s linear infinite;
+}
+
+@keyframes vhs-glitch-bar {
+  0% { top: -5%; }
+  100% { top: 105%; }
+}
+
+/* ==================
+   SECTION FADE-IN
+   ================== */
+.section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==================
+   HERO
+   ================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.hero-ascii {
+  font-family: var(--font-vt);
+  font-size: clamp(0.6rem, 1.5vw, 1rem);
+  color: var(--cyan);
+  text-shadow: var(--glow-cyan);
+  white-space: pre;
+  line-height: 1.2;
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 15vw, 12rem);
+  letter-spacing: 0.05em;
+  line-height: 0.9;
+  color: #fff;
+  text-shadow:
+    0 0 20px var(--magenta),
+    0 0 60px var(--magenta),
+    0 0 120px #ff00ff44,
+    4px 4px 0 var(--cyan);
+  animation: hero-flicker 4s ease-in-out infinite;
+  position: relative;
+}
+
+.hero-title span.cube {
+  color: var(--cyan);
+  text-shadow:
+    0 0 20px var(--cyan),
+    0 0 60px var(--cyan);
+}
+
+@keyframes hero-flicker {
+  0%, 96%, 100% { opacity: 1; }
+  97% { opacity: 0.8; }
+  98% { opacity: 1; }
+  99% { opacity: 0.6; }
+}
+
+.hero-subtitle {
+  font-family: var(--font-vt);
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  color: var(--cyan);
+  text-shadow: var(--glow-cyan);
+  margin-top: 1.5rem;
+  overflow: hidden;
+  border-right: 3px solid var(--cyan);
+  white-space: nowrap;
+  animation: typing 2.5s steps(40, end) forwards, blink-caret 0.75s step-end infinite;
+  max-width: 0;
+}
+
+@keyframes typing {
+  from { max-width: 0; }
+  to { max-width: 600px; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--cyan); }
+}
+
+.hero-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 2rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  font-family: var(--font-vt);
+  font-size: 1.2rem;
+  color: #444;
+  animation: bounce 2s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+/* ==================
+   "ARE YOU TIRED OF..."
+   ================== */
+.tired-section {
+  padding: 6rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tired-section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 4rem);
+  color: #fff;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.tired-section h2 em {
+  color: #888;
+  font-style: italic;
+}
+
+.struggle-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.struggle-list li {
+  font-family: var(--font-vt);
+  font-size: 1.5rem;
+  color: #999;
+  padding: 1rem 1.5rem;
+  border-left: 3px solid #333;
+  background: #111;
+  position: relative;
+}
+
+.struggle-list li::before {
+  content: '✗ ';
+  color: #ff3333;
+}
+
+.struggle-list li s {
+  text-decoration: line-through;
+  color: #555;
+}
+
+.struggle-bw {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: #444;
+  text-align: center;
+  margin-top: 2rem;
+  font-style: italic;
+}
+
+/* ==================
+   "BUT WAIT—"
+   ================== */
+.but-wait {
+  background: var(--magenta);
+  color: #000;
+  text-align: center;
+  padding: 3rem 2rem;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 7rem);
+  letter-spacing: 0.1em;
+  animation: flash-banner 1s ease-in-out infinite;
+  text-shadow: 2px 2px 0 #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.but-wait::before {
+  content: '★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';
+  position: absolute;
+  top: 0.5rem; left: 0;
+  width: 200%;
+  font-size: 1rem;
+  color: #000;
+  opacity: 0.3;
+  animation: star-scroll 10s linear infinite;
+}
+
+.but-wait::after {
+  content: '★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';
+  position: absolute;
+  bottom: 0.5rem; left: 0;
+  width: 200%;
+  font-size: 1rem;
+  color: #000;
+  opacity: 0.3;
+  animation: star-scroll 10s linear infinite reverse;
+}
+
+@keyframes star-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes flash-banner {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; background: #dd00dd; }
+}
+
+/* ==================
+   DUAL AGENT SPLIT
+   ================== */
+.dual-split {
+  padding: 6rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.dual-split h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: #fff;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.dual-split .split-sub {
+  text-align: center;
+  font-family: var(--font-vt);
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 3rem;
+}
+
+.split-grid {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 0;
+  position: relative;
+}
+
+.split-col {
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.split-col.aws {
+  background: linear-gradient(135deg, #1a0f00 0%, #0d0d0d 100%);
+  border: 1px solid #ff660033;
+}
+
+.split-col.cf {
+  background: linear-gradient(135deg, #1a1200 0%, #0d0d0d 100%);
+  border: 1px solid #f6a82133;
+}
+
+.split-col h3 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+.split-col.aws h3 {
+  color: var(--aws-orange);
+  text-shadow: var(--glow-orange);
+}
+
+.split-col.cf h3 {
+  color: var(--cf-amber);
+  text-shadow: var(--glow-amber);
+}
+
+.split-col .cmd-name {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.split-col .cmd-name code {
+  color: #999;
+  background: #1a1a1a;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.split-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.split-col ul li {
+  font-family: var(--font-vt);
+  font-size: 1.2rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.split-col.aws ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--aws-orange);
+}
+
+.split-col.cf ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--cf-amber);
+}
+
+.split-merge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.split-merge::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--aws-orange), var(--magenta), var(--cf-amber));
+  opacity: 0.5;
+}
+
+.split-merge span {
+  background: var(--black);
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ==================
+   "THERE'S MORE"
+   ================== */
+.theres-more {
+  padding: 6rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.theres-more h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  color: var(--cyan);
+  text-shadow: var(--glow-cyan);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: border-color 0.3s, transform 0.3s;
+}
+
+.feature-card:hover {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+.feature-card .icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.03em;
+}
+
+.feature-card p {
+  font-size: 0.85rem;
+  color: #888;
+  line-height: 1.5;
+}
+
+/* ==================
+   QUICK START
+   ================== */
+.quickstart {
+  padding: 6rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.quickstart h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: #fff;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.terminal {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.terminal-bar {
+  background: #1a1a1a;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid #333;
+}
+
+.terminal-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.terminal-dot.red { background: #ff5f56; }
+.terminal-dot.yellow { background: #ffbd2e; }
+.terminal-dot.green { background: #27c93f; }
+
+.terminal-title {
+  color: #666;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+.terminal-body {
+  padding: 1.5rem;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+
+.terminal-body .comment {
+  color: #555;
+}
+
+.terminal-body .prompt {
+  color: var(--cyan);
+}
+
+.terminal-body .cmd {
+  color: #e0e0e0;
+}
+
+.terminal-body .flag {
+  color: var(--cf-amber);
+}
+
+.terminal-body .output {
+  color: #555;
+  font-style: italic;
+}
+
+/* ==================
+   "CALL NOW" FOOTER
+   ================== */
+.call-now {
+  padding: 6rem 2rem 3rem;
+  text-align: center;
+  position: relative;
+}
+
+.call-now::before {
+  content: '';
+  display: block;
+  width: 80%;
+  max-width: 600px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--magenta), transparent);
+  margin: 0 auto 4rem;
+}
+
+.phone-number {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 4rem);
+  color: var(--magenta);
+  text-shadow: var(--glow-magenta);
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.phone-sub {
+  font-family: var(--font-vt);
+  font-size: 1.3rem;
+  color: #666;
+  margin-bottom: 3rem;
+}
+
+.phone-sub .free {
+  color: var(--cyan);
+  text-shadow: var(--glow-cyan);
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.footer-links a {
+  color: #888;
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #333;
+  border-radius: 4px;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.footer-links a:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+}
+
+.footer-legal {
+  font-size: 0.75rem;
+  color: #333;
+  margin-top: 2rem;
+  line-height: 1.8;
+}
+
+.footer-legal a {
+  color: #555;
+  text-decoration: none;
+}
+
+/* ==================
+   SCROLLING TICKER
+   ================== */
+.ticker-wrap {
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 100%;
+  background: #000;
+  border-top: 1px solid #222;
+  overflow: hidden;
+  z-index: 9990;
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.ticker {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker-scroll 30s linear infinite;
+  font-family: var(--font-vt);
+  font-size: 1rem;
+}
+
+.ticker span {
+  padding: 0 2rem;
+}
+
+.ticker .t-orange { color: var(--aws-orange); }
+.ticker .t-amber { color: var(--cf-amber); }
+.ticker .t-cyan { color: var(--cyan); }
+.ticker .t-magenta { color: var(--magenta); }
+.ticker .t-white { color: #fff; }
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ==================
+   RESPONSIVE
+   ================== */
+@media (max-width: 768px) {
+  .split-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .split-merge {
+    height: 40px;
+  }
+
+  .split-merge::before {
+    width: 100%;
+    height: 2px;
+    top: 50%; bottom: auto;
+    left: 0;
+  }
+
+  .hero-subtitle {
+    white-space: normal;
+    border-right: none;
+    animation: typing-mobile 1s ease forwards;
+    max-width: none;
+    opacity: 0;
+  }
+
+  @keyframes typing-mobile {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* bottom padding for ticker */
+.page-bottom-pad {
+  height: 48px;
+}
+</style>
+</head>
+<body>
+
+<!-- VHS Tracking -->
+<div class="vhs-tracking"></div>
+<div class="vhs-glitch"></div>
+
+<!-- ==================
+     HERO
+     ================== -->
+<section class="hero section">
+  <pre class="hero-ascii">
+    ╔═══════════════════════════════╗
+    ║  ┌─┐ ┌─┐ ┌─┐   ╔═╗ ╦ ╦ ╔╗  ║
+    ║  │   │   │   │   ║   ║ ║ ╠╩╗ ║
+    ║  │   │   └─┘ │   ╚═╝ ╚═╝ ╚═╝ ║
+    ║  └─┘ └─┘     └─┘              ║
+    ║   AWS ━━━━━╋━━━━━ CLOUDFLARE  ║
+    ║       DUAL AGENT SYSTEM       ║
+    ╚═══════════════════════════════╝
+  </pre>
+
+  <h1 class="hero-title">
+    PICO<br><span class="cube">DUAL</span>
+  </h1>
+
+  <p class="hero-subtitle">Two Agents. One Binary. Zero Excuses.</p>
+
+  <p class="hero-tagline">PicoAws + PicoFlare &mdash; Memory that never dies</p>
+
+  <div class="scroll-hint">[ scroll down ]</div>
+</section>
+
+<!-- ==================
+     "ARE YOU TIRED OF..."
+     ================== -->
+<section class="tired-section section">
+  <h2>Are you <em>tired</em> of&hellip;</h2>
+  <ul class="struggle-list">
+    <li>Agents that <s>forget everything</s> every time you restart?</li>
+    <li>Being locked into <s>one cloud provider</s> like it's 2015?</li>
+    <li>Manual scaling that makes you want to <s>throw your laptop</s>?</li>
+    <li>Memory stored on <s>local disk</s> &mdash; one reboot away from oblivion?</li>
+    <li>Deploying <s>two separate binaries</s> for two clouds?</li>
+  </ul>
+  <p class="struggle-bw">[ shown in black and white for dramatic effect ]</p>
+</section>
+
+<!-- ==================
+     "BUT WAIT—"
+     ================== -->
+<section class="but-wait section">
+  BUT WAIT&mdash;
+</section>
+
+<!-- ==================
+     DUAL AGENT SPLIT
+     ================== -->
+<section class="dual-split section">
+  <h2>ONE BINARY. TWO CLOUDS.</h2>
+  <p class="split-sub">Pick your entrypoint. Run on your cloud. Share the same brain.</p>
+
+  <div class="split-grid">
+    <!-- AWS / PicoAws -->
+    <div class="split-col aws">
+      <h3>PICOAWS</h3>
+      <p class="cmd-name">Entrypoint: <code>./picoclaw</code></p>
+      <ul>
+        <li>S3-backed memory &mdash; survives everything</li>
+        <li>AWS MCP tools enabled by default</li>
+        <li>Multi-channel: Telegram, Slack, Discord, 10+</li>
+        <li>HTTP gateway + chat API</li>
+        <li>EC2, ECS, Lambda &mdash; your pick</li>
+        <li>IAM-based auth, zero secrets on disk</li>
+      </ul>
+    </div>
+
+    <!-- Merge line -->
+    <div class="split-merge">
+      <span>+</span>
+    </div>
+
+    <!-- Cloudflare / PicoFlare -->
+    <div class="split-col cf">
+      <h3>PICOFLARE</h3>
+      <p class="cmd-name">Entrypoint: <code>./picoflare</code></p>
+      <ul>
+        <li>R2 + Vectorize for semantic memory</li>
+        <li>Cloudflare MCP integration</li>
+        <li><code>/createagent</code> &mdash; spin up agents on the fly</li>
+        <li><code>create_skill</code> &mdash; teach it new tricks</li>
+        <li>Cloudflare Tunnel deployment</li>
+        <li>Edge-native, globally distributed</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================
+     "THERE'S MORE!"
+     ================== -->
+<section class="theres-more section">
+  <h2>THERE'S MORE!</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <span class="icon">🧠</span>
+      <h3>MEMORY THAT NEVER DIES</h3>
+      <p>S3 + R2 + Vectorize. Your agent remembers across restarts, redeploys, and device loss. Long-term facts, daily notes, semantic search.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">🤖</span>
+      <h3>LLM-DEFINED AGENTS</h3>
+      <p>Agents defined by prompts, not code. Swap models on the fly &mdash; OpenRouter, Anthropic, OpenAI. The agent IS the config.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">📡</span>
+      <h3>10+ CHANNELS</h3>
+      <p>Telegram, Discord, Slack, Matrix, IRC, WhatsApp, SMS, email, webhooks, HTTP API. One agent, every platform.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">⚡</span>
+      <h3>CODE MODE</h3>
+      <p>Your agent can write, review, and execute code. Give it a task, get back working software. Self-building repo agent included.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">🔧</span>
+      <h3>SKILLS &amp; TOOLS</h3>
+      <p>MCP tools, custom skills, create_skill for runtime learning. AWS MCP and Cloudflare MCP out of the box.</p>
+    </div>
+    <div class="feature-card">
+      <span class="icon">🪶</span>
+      <h3>TINY FOOTPRINT</h3>
+      <p>Low RAM, low CPU. Runs on a $5 VPS, a Raspberry Pi, or a Lambda function. One Go binary, no runtime dependencies.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================
+     QUICK START
+     ================== -->
+<section class="quickstart section">
+  <h2>QUICK START</h2>
+  <div class="terminal">
+    <div class="terminal-bar">
+      <span class="terminal-dot red"></span>
+      <span class="terminal-dot yellow"></span>
+      <span class="terminal-dot green"></span>
+      <span class="terminal-title">~/pico-dual</span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="comment"># Clone it</span></div>
+      <div><span class="prompt">$ </span><span class="cmd">git clone https://github.com/pico-claw/pico-combined.git</span></div>
+      <div><span class="prompt">$ </span><span class="cmd">cd pico-combined</span></div>
+      <br>
+      <div><span class="comment"># Build both agents</span></div>
+      <div><span class="prompt">$ </span><span class="cmd">go build <span class="flag">-o picoclaw</span> ./cmd/picoclaw</span></div>
+      <div><span class="prompt">$ </span><span class="cmd">go build <span class="flag">-o picoflare</span> ./cmd/picoflare</span></div>
+      <br>
+      <div><span class="comment"># Run AWS agent (S3 memory + gateway)</span></div>
+      <div><span class="prompt">$ </span><span class="cmd">export PICOCLAW_MEMORY_S3_BUCKET=<span class="flag">my-bucket</span></span></div>
+      <div><span class="prompt">$ </span><span class="cmd">./picoclaw agent</span></div>
+      <div><span class="output">  → agent online, memory: s3://my-bucket/memory/</span></div>
+      <br>
+      <div><span class="comment"># Or run Cloudflare agent</span></div>
+      <div><span class="prompt">$ </span><span class="cmd">./picoflare</span></div>
+      <div><span class="output">  → picoflare interactive mode</span></div>
+      <br>
+      <div><span class="comment"># Or run Cloudflare Telegram bot</span></div>
+      <div><span class="prompt">$ </span><span class="cmd">./picoflare bot</span></div>
+      <div><span class="output">  → telegram bot online</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================
+     "CALL NOW" FOOTER
+     ================== -->
+<section class="call-now section">
+  <div class="phone-number">1-800-PICODUAL</div>
+  <p class="phone-sub">
+    Call now and get a <span class="free">FREE SLEEVELESS POLO</span>*
+  </p>
+
+  <div class="footer-links">
+    <a href="https://github.com/pico-claw/pico-combined">GitHub Repo</a>
+    <a href="https://github.com/pico-claw/pico-combined/blob/main/README.md">Docs</a>
+    <a href="https://github.com/pico-claw/pico-combined/blob/main/LICENSE">MIT License</a>
+  </div>
+
+  <p class="footer-legal">
+    * Sleeveless polo not actually included. Jacked Jeff Bezos is a fictional character.<br>
+    Pico Dual is open source under the <a href="https://github.com/pico-claw/pico-combined/blob/main/LICENSE">MIT License</a>.<br>
+    MEMORY THAT NEVER DIES. AGENTS THAT NEVER SKIP LEG DAY.
+  </p>
+</section>
+
+<div class="page-bottom-pad"></div>
+
+<!-- ==================
+     SCROLLING TICKER
+     ================== -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="t-orange">S3 MEMORY</span>
+    <span class="t-white">★</span>
+    <span class="t-amber">R2 + VECTORIZE</span>
+    <span class="t-white">★</span>
+    <span class="t-cyan">10+ CHANNELS</span>
+    <span class="t-white">★</span>
+    <span class="t-magenta">CODE MODE</span>
+    <span class="t-white">★</span>
+    <span class="t-orange">AWS MCP</span>
+    <span class="t-white">★</span>
+    <span class="t-amber">CLOUDFLARE MCP</span>
+    <span class="t-white">★</span>
+    <span class="t-cyan">LLM-DEFINED AGENTS</span>
+    <span class="t-white">★</span>
+    <span class="t-magenta">ONE BINARY</span>
+    <span class="t-white">★</span>
+    <span class="t-orange">ZERO EXCUSES</span>
+    <span class="t-white">★</span>
+    <span class="t-amber">MEMORY THAT NEVER DIES</span>
+    <span class="t-white">★</span>
+    <span class="t-cyan">AGENTS THAT NEVER SKIP LEG DAY</span>
+    <span class="t-white">★</span>
+    <span class="t-magenta">CALL 1-800-PICODUAL</span>
+    <span class="t-white">★</span>
+    <!-- duplicate for seamless loop -->
+    <span class="t-orange">S3 MEMORY</span>
+    <span class="t-white">★</span>
+    <span class="t-amber">R2 + VECTORIZE</span>
+    <span class="t-white">★</span>
+    <span class="t-cyan">10+ CHANNELS</span>
+    <span class="t-white">★</span>
+    <span class="t-magenta">CODE MODE</span>
+    <span class="t-white">★</span>
+    <span class="t-orange">AWS MCP</span>
+    <span class="t-white">★</span>
+    <span class="t-amber">CLOUDFLARE MCP</span>
+    <span class="t-white">★</span>
+    <span class="t-cyan">LLM-DEFINED AGENTS</span>
+    <span class="t-white">★</span>
+    <span class="t-magenta">ONE BINARY</span>
+    <span class="t-white">★</span>
+    <span class="t-orange">ZERO EXCUSES</span>
+    <span class="t-white">★</span>
+    <span class="t-amber">MEMORY THAT NEVER DIES</span>
+    <span class="t-white">★</span>
+    <span class="t-cyan">AGENTS THAT NEVER SKIP LEG DAY</span>
+    <span class="t-white">★</span>
+    <span class="t-magenta">CALL 1-800-PICODUAL</span>
+    <span class="t-white">★</span>
+  </div>
+</div>
+
+<!-- ==================
+     INLINE JS
+     ================== -->
+<script>
+// Scroll-triggered fade-in with IntersectionObserver
+(function() {
+  const sections = document.querySelectorAll('.section');
+
+  // Make hero visible immediately
+  const hero = document.querySelector('.hero');
+  if (hero) hero.classList.add('visible');
+
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  sections.forEach(function(section) {
+    // Skip hero (already visible)
+    if (!section.classList.contains('hero')) {
+      observer.observe(section);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
